@@ -1,0 +1,162 @@
+// This file contains code to create a graph in which each vertex represents an airport. It implements Dijkstra's algorithm with maps.
+
+public class FlightMap {
+	private Map<String, Vertex> graph;
+	public ArrayList<Edge> edges;
+	
+	public FlightMap() {
+		edges = new ArrayList<>();
+	}
+	
+	public void makeMap() {
+		graph = new HashMap<>(edges.size());
+		
+		for (Edge e : edges) {
+			if (!graph.containsKey(e.v1))
+				graph.put(e.v1, new Vertex(e.v1));
+			if (!graph.containsKey(e.v2))
+				graph.put(e.v2, new Vertex(e.v2));
+		}
+		
+		for (Edge e : edges) {
+			graph.get(e.v1).neighbors_cost.put(graph.get(e.v2), e.cost);
+			graph.get(e.v1).neighbors_time.put(graph.get(e.v2), e.time);
+		}
+	}
+	
+	
+	public void dijkstra(String start, String meas) {
+		final Vertex source = graph.get(start);
+		NavigableSet<Vertex> q = new TreeSet<>();
+		
+		for (Vertex v : graph.values()) {
+			v.prev = v == source ? source : null;
+			v.dist = v == source ? 0 : Integer.MAX_VALUE;
+			q.add(v);
+		}
+		
+		if (meas.contentEquals("Cost") || meas.contentEquals("cost")) {
+			dijkstra_cost(q);
+		}
+		
+		if (meas.contentEquals("Time") || meas.contentEquals("time")) {
+			dijkstra_time(q);
+		}
+	}
+	
+	
+	public void dijkstra_cost(NavigableSet<Vertex> q) {
+		Vertex u, v;
+		while (!q.isEmpty()) {
+			u = q.pollFirst(); // Vertex with shortest distance
+			if (u.dist == Integer.MAX_VALUE) 
+				break;	// Ignore u if it is unreachable
+			
+			for (Map.Entry<Vertex, Integer> a : u.neighbors_cost.entrySet()) {
+				v = a.getKey();
+				
+				final int alternateDist = u.dist + a.getValue();
+				if (alternateDist < v.dist) {
+					q.remove(v);
+					v.dist = alternateDist;
+					v.prev = u;
+					q.add(v);
+				}
+			}
+		}
+	}
+	
+	
+	public void dijkstra_time(NavigableSet<Vertex> q) {
+		Vertex u, v;
+		while (!q.isEmpty()) {
+			u = q.pollFirst(); // Vertex with shortest distance
+			if (u.dist == Integer.MAX_VALUE) 
+				break;	// Ignore u if it is unreachable
+			
+			for (Map.Entry<Vertex, Integer> a : u.neighbors_time.entrySet()) {
+				v = a.getKey();
+				
+				final int alternateDist = u.dist + a.getValue();
+				if (alternateDist < v.dist) {
+					q.remove(v);
+					v.dist = alternateDist;
+					v.prev = u;
+					q.add(v);
+				}
+			}
+		}
+	}
+	
+	
+	public void addEdge(String vt1, String vt2, int c, int t) {
+		Edge e = new Edge(vt1,vt2,c,t);
+		edges.add(e);
+	}
+	
+	
+	public void printGraph() {
+		for (int i = 0; i < edges.size(); i++) {
+			Edge e = edges.get(i);
+			System.out.println(e.v1 + " to " + e.v2 + ":");
+			System.out.println("Cost = " + e.cost);
+			System.out.println("Time = " + e.time + "\n");
+		}
+	}
+	
+	
+	public void printDijkstra(String endName) {
+		graph.get(endName).printPath();
+		System.out.println();
+		
+	}
+	
+	
+	public static class Edge {
+		public final String v1, v2;
+		public final int cost, time;
+		
+		// Constructor
+		public Edge(String vt1, String vt2, int c, int t) {
+			this.v1 = vt1;
+			this.v2 = vt2;
+			this.cost = c;
+			this.time = t;
+		}
+	}
+	
+	
+	public static class Vertex implements Comparable<Vertex> {
+		public final String name;
+		public int dist = Integer.MAX_VALUE;
+		public Vertex prev = null;
+		public final Map<Vertex, Integer> neighbors_cost = new HashMap<>();
+		public final Map<Vertex, Integer> neighbors_time = new HashMap<>();
+		
+		// Constructor
+		public Vertex(String n) {
+			this.name = n;
+		}
+		
+		public void printPath() {
+			if (this == this.prev)
+				System.out.println(this.name);
+			
+			else if (this.prev == null)
+				System.out.println("unreached");
+			
+			else {
+				this.prev.printPath();
+				System.out.println("  --> " + this.name + "(" + this.dist + ")");
+			}
+		}
+		
+		public int compareTo(Vertex other) {
+			if (dist == other.dist) {
+				return name.compareTo(other.name);
+			}
+			
+			return Integer.compare(dist, other.dist);
+		}
+	}
+}
