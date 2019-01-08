@@ -1,5 +1,11 @@
 // This file contains code to create a graph in which each vertex represents an airport. It implements Dijkstra's algorithm with maps.
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NavigableSet;
+import java.util.TreeSet;
+
 public class FlightMap {
 	private Map<String, Vertex> graph;
 	public ArrayList<Edge> edges;
