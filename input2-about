@@ -1,0 +1,3 @@
+This file will contain a sequence of departure/arrival city pairs. For each pair, the program will determine whether or not the flight is possible. If the flight is possible, the program will determine the most efficient flight based on cost or time.
+
+Each new line in the text file will contain a new request. It will contain a departure city (String), an arrival city (String), and a weight by which to choose the most efficient flight (T for time or C for cost, both char). Each field will be separated by a pipe (|).
