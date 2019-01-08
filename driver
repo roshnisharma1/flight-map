@@ -1,0 +1,84 @@
+// This driver class contains the main function that runs the program.
+
+public class Driver {
+
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		
+		// Obtain input file names
+		System.out.println("Enter name of data file: ");
+		String dataFileName = input.nextLine();
+		
+		System.out.println("Enter name of query file: ");
+		String queryFileName = input.nextLine();
+		
+		try {
+			BufferedReader dataReader = new BufferedReader(new FileReader(dataFileName));
+			BufferedReader queryReader = new BufferedReader(new FileReader(queryFileName));
+			
+			// Obtain output file name
+			System.out.println("Enter output file name: ");
+			String outputFileName = input.nextLine();
+						
+			BufferedWriter fileWriter = new BufferedWriter(new FileWriter(new File(outputFileName)));
+			
+			// Create a graph
+			FlightMap g = new FlightMap();
+			
+			// Read in data file
+			// Fill in edges into graph
+			String conn;
+
+			while((conn = dataReader.readLine()) != null) {
+				String[] tokens = conn.split(Pattern.quote("|"));
+				
+				String departCity = tokens[0];
+				String arriveCity = tokens[1];
+				int cost = Integer.parseInt(tokens[2]);
+				int time = Integer.parseInt(tokens[3]);
+				
+				// Add edge to graph
+				g.addEdge(departCity, arriveCity, cost, time);
+			 }
+			
+			// Print all the connections in the graph
+			g.makeMap();
+			g.printGraph();
+			
+			// Read in query file
+			// Process each request
+			String req;
+			
+			while((req = queryReader.readLine()) != null) {
+				String[] tokens = req.split(Pattern.quote("|"));
+				
+				String departCity = tokens[0];
+				String arriveCity = tokens[1];
+				String meas = tokens[2];
+				
+				if (meas.contentEquals("T"))
+					meas = "time";
+				
+				if (meas.contentEquals("C"))
+					meas = "cost";
+				
+				g.dijkstra(departCity, meas);
+				g.printDijkstra(arriveCity);
+				System.out.println();
+				
+			}
+		}
+		
+		catch(FileNotFoundException e) {
+			System.out.println("Unable to open file.");
+		}
+		
+		catch(IOException e) {
+			System.out.println("Error reading file.");
+		}
+		
+		
+
+	}
+
+}
