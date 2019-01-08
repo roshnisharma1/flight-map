@@ -1,5 +1,13 @@
 // This driver class contains the main function that runs the program.
 
+import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class Driver {
 
 	public static void main(String[] args) {
@@ -15,12 +23,6 @@ public class Driver {
 		try {
 			BufferedReader dataReader = new BufferedReader(new FileReader(dataFileName));
 			BufferedReader queryReader = new BufferedReader(new FileReader(queryFileName));
-			
-			// Obtain output file name
-			System.out.println("Enter output file name: ");
-			String outputFileName = input.nextLine();
-						
-			BufferedWriter fileWriter = new BufferedWriter(new FileWriter(new File(outputFileName)));
 			
 			// Create a graph
 			FlightMap g = new FlightMap();
@@ -76,9 +78,6 @@ public class Driver {
 		catch(IOException e) {
 			System.out.println("Error reading file.");
 		}
-		
-		
-
 	}
 
 }
