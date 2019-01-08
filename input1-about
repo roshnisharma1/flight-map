@@ -1,0 +1,3 @@
+File input1 contains a sequence of city pairs representing different legs of flights that will be considered when making the flight plan. Each leg is an edge to the graph whereas each airport is a vertex. 
+
+Each new line in the text file will contains the departure city name (String), arrival city name (String), the cost of the flight (integer) and number of minutes in the flight (integer). Each field will be separated with a pipe (|).
