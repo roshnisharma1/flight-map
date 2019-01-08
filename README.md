@@ -1,5 +1,5 @@
 # flight-map
-Description: This program creates a flight map based on an input file (input1). It implements Dijkstra's algorithm with maps. According to a query file, the program will determine the best route from a departure airport to arrival airport based on preferred weight (cost or time).
+Description: This program creates a flight map based on an input file (input1). It creates a graph in which each vertex represents an airport, and implements Dijkstra's algorithm with maps. According to a query file, the program will determine the best route from a departure airport to arrival airport based on preferred weight (cost or time).
 
 IDE used: Eclipse
 
